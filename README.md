@@ -259,7 +259,7 @@ You should now be able to create and retrieve your profile from the remote serve
 The last update to have all of our previous functionality working with a remote server is to update our profile deleting functions. As we have before, let's clear out our `profileService.deleteProfile` function and start fresh.
 
 Our fresh `deleteProfile` function will need to retrieve our `profileId` from local storage, then return an HTTP request with a method of 'DELETE' to the URL `baseUrl + 'api/profiles/' + profileId`.
-```javscript
+```javascript
 this.deleteProfile = function() {
   var profileId = JSON.parse(localStorage.getItem('profileId')).profileId;
 
