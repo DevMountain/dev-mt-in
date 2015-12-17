@@ -24,7 +24,7 @@ Inside of `homeCtrl.js` we will need to create a new controller on an `angular.m
 ```javascript
 angular.module('devMtIn')
 .controller('homeCtrl', function($scope) {
-	
+
 });
 ```
 Remember that we don't want to pass our `angular.module` an array here! When you pass in an array, you are making an entire new app rather than looking for your current one. Now all we need to do is include the script in a new script tag and add the `ng-controller` attribute to our `<body>` tag and pass it "homeCtrl".
@@ -110,7 +110,7 @@ To begin day two we need to start by creating a new file named `profileService.j
 ```javascript
 angular.module('devMtIn')
 .service('profileService', function() {
-	
+
 });
 ```
 An important distinction between services and controllers is that services do not take in the `$scope` parameter. Services will have no direct link to the view--their primary purpose is to do the heavy lifting for the rest of the application and pass data to controllers.
@@ -187,16 +187,16 @@ Yesterday we stored our profiles in local storage, allowing them to persist betw
 
 Before we start writing our new code, let's make some adjustments. Delete the array of friends from the `profileService.checkForProfile` function and run `localStorage.removeItem('myProfile')` in your console so we can start fresh.
 
-To begin, we need to inject Angular's built in `$http` service into our `profileService`. `$http` will allow us to make HTTP requests for any CRUD operation (Create, Read, Update, Delete). We will also need to create a variable named `baseUrl` and set it equal to _**--BASEURL FIXME--**_.
+To begin, we need to inject Angular's built in `$http` service into our `profileService`. `$http` will allow us to make HTTP requests for any CRUD operation (Create, Read, Update, Delete). We will also need to create a variable named `baseUrl` and set it equal to `http://connections.devmounta.in/`
 
 We're going to adjust our `saveProfile` function inside of `profileService`. Now instead of saving our whole profile to local storage, we want to post it to the database, and just save the unique `_id` the database sends back to us. Let's delete everything we currently have inside of the function and start from scratch.
 
 Our updated `saveProfile` function will make an HTTP request with the method of 'POST', data of `profile`, and a url of `baseUrl + '/api/profiles'`. It should look something like this:
 ```javascript
-this.postProfile = function(profile) {
+this.saveProfile = function(profile) {
   $http({
     method: 'POST' // Request method.
-  , url: baseUrl + '/api/profiles' // URL we are making the request to.
+  , url: baseUrl + 'api/profiles/' // URL we are making the request to.
   , data: profile // The data we are requesting be posted.
   })
 }
@@ -206,11 +206,11 @@ We will also want to add a `.then` method to the end of our `$http` request. `.t
 this.saveProfile = function(profile) {
   $http({ // Requests that your profile be added to the database
     method: 'POST'
-  , url: baseUrl + '/api/profiles'
+  , url: baseUrl + 'api/profiles/'
   , data: profile
   })
   .then(function(profileResponse) { // What to do after a response comes back from the server.
-  localStorage.setItem('profileId', JSON.parse({ profileId: profileResponse.data._id })); // Save our unique _id to local storage
+  localStorage.setItem('profileId', JSON.stringify({ profileId: profileResponse.data._id })); // Save our unique _id to local storage
   })
   .catch(function(err) {
     console.error(err);
@@ -227,7 +227,7 @@ To make this work we're going to change our `profileService.checkForProfile` fun
 this.checkForProfile = function(profileId) {
   return $http({
     method: 'GET'
-  , url: baseUrl + '/api/profiles' + profileId
+  , url: baseUrl + 'api/profiles/' + profileId
   });
 }
 ```
@@ -239,7 +239,7 @@ The final function should look like this:
 ```javascript
 $scope.checkForProfile = function() {
   var profileId = JSON.parse(localStorage.getItem('profileId'));
-  
+
   if (profileId) {
     profileService.checkForProfile(profileId.profileId)
     .then(function(profile) {
@@ -258,14 +258,14 @@ You should now be able to create and retrieve your profile from the remote serve
 ### Step Three: Deleting your profile.
 The last update to have all of our previous functionality working with a remote server is to update our profile deleting functions. As we have before, let's clear out our `profileService.deleteProfile` function and start fresh.
 
-Our fresh `deleteProfile` function will need to retrieve our `profileId` from local storage, then return an HTTP request with a method of 'DELETE' to the URL `baseUrl + '/api/profiles/' + profileId`.
+Our fresh `deleteProfile` function will need to retrieve our `profileId` from local storage, then return an HTTP request with a method of 'DELETE' to the URL `baseUrl + 'api/profiles/' + profileId`.
 ```javscript
 this.deleteProfile = function() {
   var profileId = JSON.parse(localStorage.getItem('profileId')).profileId;
 
   return $http({
     method: 'DELETE'
-  , url: baseUrl + '/api/profiles/' + profileId	
+  , url: baseUrl + 'api/profiles/' + profileId
   });
 }
 ```
@@ -404,4 +404,3 @@ $scope.checkForProfile = function() {
 Now whenever your code checks for your profile it will also update second level friends.
 
 You've completed your first week of Angular! Congratulations! Just today you created your own promise and implemented a recursive, closure scoped function!
-
