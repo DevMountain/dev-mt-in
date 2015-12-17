@@ -1,5 +1,5 @@
 angular.module('devMtIn')
-.controller('homeCtrl', function($scope, profileService) {
+.controller('homeCtrl', function($scope, profileService, friendService) {
 
   $scope.checkForProfile = function() {
     var profileId = JSON.parse(localStorage.getItem('profileId'));
@@ -46,5 +46,19 @@ angular.module('devMtIn')
       console.error(err);
     })
   };
+
+  $scope.findFriends = function(query) {
+    friendService.findFriends($scope.myProfile._id, query)
+    .then(function(response) {
+      $scope.potentialFriends = response;
+    })
+  };
+
+  $scope.addFriend = function(friendId) {
+    friendService.addFriend($scope.myProfile._id, friendId)
+    .then(function() {
+      $scope.checkForProfile();
+    })
+  }
 
 });
