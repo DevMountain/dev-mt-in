@@ -47,8 +47,9 @@
       <span class="closeBtn" ng-click="removeFriend(friend._id)"></span>
         &nbsp;&nbsp;{{ friend.name}}
       <br />
-      <div class="secondConnection friendList">
-        My Second Connections
+      My Second Connections
+      <div class="secondConnection friendList" ng-repeat="scFriend in secondLevelFriends">
+        {{scFriend.name}}&nbsp;&nbsp;
       </div>
     </div>
   </div>

@@ -8,6 +8,10 @@ angular.module('devMtIn')
       profileService.checkForProfile(profileId.profileId)
       .then(function(profile) {
         $scope.myProfile = profile.data;
+        friendService.findFriendFriends(profile.data) // finding second level friends
+        .then(function(response) {
+          $scope.secondLevelFriends = response.friends;
+        })
       })
       .catch(function(err) {
         console.error(err);
