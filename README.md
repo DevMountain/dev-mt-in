@@ -194,7 +194,7 @@ We're going to adjust our `saveProfile` function inside of `profileService`. Now
 Our updated `saveProfile` function will make an HTTP request with the method of 'POST', data of `profile`, and a url of `baseUrl + '/api/profiles'`. It should look something like this:
 ```javascript
 this.saveProfile = function(profile) {
-  $http({
+  return $http({
     method: 'POST' // Request method.
   , url: baseUrl + 'api/profiles/' // URL we are making the request to.
   , data: profile // The data we are requesting be posted.
@@ -204,7 +204,7 @@ this.saveProfile = function(profile) {
 We will also want to add a `.then` method to the end of our `$http` request. `.then` takes in a callback function as an argument, and that callback function will take in a `profileResponse` parameter. Inside of our callback function we now want to set `localStorage.setItem('profile', JSON.stringify({ profileId: profileResponse.data._id }));`, then `catch` any errors. The end result will look like this:
 ```javascript
 this.saveProfile = function(profile) {
-  $http({ // Requests that your profile be added to the database
+  return $http({ // Requests that your profile be added to the database
     method: 'POST'
   , url: baseUrl + 'api/profiles/'
   , data: profile

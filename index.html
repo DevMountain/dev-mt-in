@@ -44,8 +44,8 @@
     </select>
     <div class="friendList" ng-repeat="friend in myProfile.friends | filter : findFriend.name
                                 | orderBy: 'name': sortReverse">
-      <span class="closeBtn"></span>
-        {{ friend.name}}
+      <span class="closeBtn" ng-click="removeFriend(friend._id)"></span>
+        &nbsp;&nbsp;{{ friend.name}}
       <br />
       <div class="secondConnection friendList">
         My Second Connections

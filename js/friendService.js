@@ -20,4 +20,12 @@ angular.module('devMtIn')
     })
   };
 
+  this.removeFriend = function(userId, friendId) {
+    return $http({
+      method: 'PUT',
+      url: baseUrl + 'api/friends/remove/' + userId,
+      data: {friendId: friendId}
+    })
+  };
+
 });
